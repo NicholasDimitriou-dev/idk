@@ -95,21 +95,25 @@ public class SplinePath : MonoBehaviour
         {
             return _distanceTable.Last().u;
         }
-
         if (distance <= _distanceTable[0].distance)
         {
             return _distanceTable[0].u;
         }
-        for (int i = 0; i < _distanceTable.Count; i++)
+
+        float final = 0f;
+
+        for (int i = 0; i < (samplesPerSegment * SegmentCount); i++)
         {
-            if (_distanceTable[i+1].distance >= distance)
+            if (distance >= _distanceTable[i].distance && _distanceTable[i + 1].distance >= distance)
             {
-                float fraction = (distance-_distanceTable[i].distance)/(_distanceTable[i+1].distance-distance);
-                float divisor = _distanceTable[i].u-_distanceTable[i+1].u;
-                return _distanceTable[i].u + divisor*fraction;
+                float lower = _distanceTable[i].distance;
+                float higher = _distanceTable[i + 1].distance;
+                float fraction = (distance - lower) / (higher - lower);
+                float uDifference = _distanceTable[i + 1].u - _distanceTable[i].u;
+                final = _distanceTable[i].u + fraction * uDifference;
             }
         }
-        return 0f;
+        return final;
     }
 
     void OnDrawGizmos()
