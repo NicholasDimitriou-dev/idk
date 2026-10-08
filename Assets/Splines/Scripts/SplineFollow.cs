@@ -1,3 +1,4 @@
+using System;
 using System.Reflection.Metadata;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class SplineFollow : MonoBehaviour
     public float speed = 2.5f; // Positive world units per second in the completed exercise.
     public bool travelByDistance = true;
     public bool faceTarget = true;
-
+    public GameObject targetObject;
     float _distance;
     float _u;
 
@@ -47,6 +48,7 @@ public class SplineFollow : MonoBehaviour
         {
             gameObject.transform.LookAt(path.SampleTangent(_u));
         }
+        
     }
 
     public void Restart()
