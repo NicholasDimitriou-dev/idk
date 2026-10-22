@@ -20,9 +20,19 @@ public class FloatSpring
     {
         // TODO: Turn frequencyHz and dampingRatio into a stiffness and a damping, as in
         // TestBetterSpring. This spring has a mass of 1. Treat negative settings as 0.
-
+        float omega = 2f * Mathf.PI * frequencyHz;
+        float stiffness =  omega * omega;
+        float critDamp = 2 * Mathf.Sqrt(stiffness);
+        float damping = dampingRatio * critDamp;
+        
+        
         // TODO: Add the restoring and damping forces and take one semi-implicit Euler step
         // toward equilibrium, updating _velocity and then _value.
+        float restoringForce = -stiffness * (_value - equilibrium);
+        float dampingForce = -damping * _velocity;
+        float _acceleration = (dampingForce + restoringForce);
+        _velocity += _acceleration * deltaTime; 
+        _value += _velocity * deltaTime ;
     }
 
     // Steps the spring in fixed 1/120 s chunks, however long the frame was. Call this once a frame.
